@@ -7,5 +7,5 @@ The aim of this project is to create an interactive world map that shows how eco
 The main technology for the visualisation will be D3.js & Leaflet.js. Using these two libraries we will deliver a data visualisation that displays a map with elements that are able to change colour depending on the underlying data.
 
 ### Data sources
-International trade data: https://dataverse.harvard.edu/dataverse/atlas
-Country border geoJSON data: https://datahub.io/core/geo-countries#pandas
+- International trade data: https://dataverse.harvard.edu/dataverse/atlas
+- Country border geoJSON data: https://datahub.io/core/geo-countries#pandas
