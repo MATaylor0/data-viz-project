@@ -7,7 +7,7 @@ L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
   tileSize: 512,
   maxZoom: 18,
   zoomOffset: -1,
-  id: "mapbox/streets-v11",
+  id: "mapbox/light-v9",
   accessToken: API_KEY
 }).addTo(myMap);
 
@@ -17,4 +17,20 @@ var geoData = "static/data/countries.geojson";
 var geojson;
 
 L.geoJson(geoData).addTo(myMap);
-console.log(geoData);
+
+// Grab data with d3
+d3.json(geoData, function(data) {
+
+  // Create a new choropleth layer
+  geojson = L.choropleth(data, {
+    
+    style:
+    {
+      // Border colour
+      color: "#fff",
+      weight: 1,
+      fillOpacity: 0.8
+    }
+  }).addTo(myMap);
+
+});
