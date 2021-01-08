@@ -50,7 +50,7 @@ lyrBoundaries = L.geoJSON.ajax('./static/data/countries.geojson',{ style: myStyl
                                   expVal = numberWithCommas(expVal);
                                   impNum = numberWithCommas(impNum);
 
-                                  layer.bindPopup("<h5><b>" + feature.properties.ADMIN + "</h5></b><hr>" +
+                                  layer.bindTooltip("<h4 style = 'text-align: center; background-color: #ffcc66'><b>" + feature.properties.ADMIN + "</h4></b>" +
                                     "Export: " + '$' + expVal + '<br>' + 'Import: ' + '$' + impNum + '<br>' +
                                     'Deficit: ' + (trdDefi < 0 ? '-' + formatDollar(trdDefi) : formatDollar(trdDefi)),{interactive:false});
                                   layer.on({
@@ -109,13 +109,6 @@ function resetHighlight(e) {
   lyrBoundaries.resetStyle(e.target);
 
 }
-
-// function click listener that zoom to the country
-function zoomToFeature(e) {
-  map.fitBounds(e.target.getBounds());
-}
-
-
 
 // function to assign suitable color depend up export value
 function getColor(val) {
@@ -188,7 +181,7 @@ var legend = L.control({position: 'bottomleft'});
 // Add legend to the map
 legend.addTo(mymap);
 
-/*
+
 mymap.on('click', function(e){
   if (e.originalEvent.shiftKey) {
       alert(mymap.getZoom());
@@ -196,5 +189,5 @@ mymap.on('click', function(e){
       alert(e.latlng.toString());
   }
 });
-*/
+
 // ctlLayers = L.control.layers(objBasemaps, objOverlays, {collapsed: false}).addTo(mymap);
