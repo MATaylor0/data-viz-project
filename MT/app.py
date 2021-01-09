@@ -7,12 +7,14 @@ app = Flask(__name__)
 
 mongo = PyMongo(app, uri="mongodb://localhost:27017/mars_app")
 
+export_data = sqlalchemy("static/data/export.sqlite")
+
 @app.route("/")
 def index():
 
     mars = mongo.db.collection.find_one()
     
-    return render_template("index.html", mars = mars)
+    return render_template("index.html", export = export_data)
 
 @app.route("/scrape")
 def scrape():
