@@ -19,6 +19,8 @@ var lyrBoundaries;
 var expDict = {};
 var impDict = {};
 var expVal, impVal, defVal;
+var selYear;
+var optColor;
 
 // use d3 to load csv file and create dictionary to hold key/value pairs
 d3.csv('./static/data/export_data_2018.csv', function(expData) {
@@ -29,19 +31,24 @@ d3.csv('./static/data/export_data_2018.csv', function(expData) {
 
   for (var i = 0; i < expData.length; i++) {
     var att = expData[i];
-
     expDict[att.location_code] = att.export_value;
     impDict[att.location_code] = att.import_value;
 
   }
 });
 
-// console.log(expDic);
-
 // setup bindPopup for each country
 lyrBoundaries = new L.LayerGroup();
-lyrBoundaries = L.geoJSON.ajax('./static/data/countries.geojson',{ style: myStyle,
+
+// initialize the layer and tooltip after the basemap loaded
+setTooltip();
+
+// setting tooltip for layerBoundaries
+function setTooltip() {
+  lyrBoundaries = L.geoJSON.ajax('./static/data/countries.geojson',{ style: myStyle,
                                   onEachFeature: function(feature, layer) {
+
+                                  // console.log(selYear);
                                   var expVal = parseFloat(optColor).toFixed(2);
                                   var impNum = parseFloat(impVal).toFixed(2);
 
@@ -52,16 +59,80 @@ lyrBoundaries = L.geoJSON.ajax('./static/data/countries.geojson',{ style: myStyl
 
                                   layer.bindTooltip("<h4 style = 'text-align: center; background-color: #ffcc66'><b>" + feature.properties.ADMIN + "</h4></b>" +
                                     "Export: " + '$' + expVal + '<br>' + 'Import: ' + '$' + impNum + '<br>' +
-                                    'Deficit: ' + (trdDefi < 0 ? '-' + formatDollar(trdDefi) : formatDollar(trdDefi)),{interactive:false});
+                                    'Surplus: ' + (trdDefi < 0 ? '-' + formatDollar(trdDefi) : formatDollar(trdDefi)),{interactive:false});
                                   layer.on({
                                     mouseover: highlightFeature,
                                     mouseout: resetHighlight
                                   });
                                 }
   });
+}
 
 // add layer to map
 lyrBoundaries.addTo(mymap);
+
+// use jQuery library to acquire the selected year in radio button
+$("input[name=fltYear]").click(function(){
+  selYear = $("input[name=fltYear]:checked").val()
+  // console.log(selYear);
+
+  switch(selYear) {
+    case '2016':
+      console.log(selYear);
+      d3.csv('./static/data/export_data_2016.csv', function(expData) {
+
+        expData.export_value = +expData.export_value;
+        expData.import_value = +expData.import_value;
+
+        for (var i = 0; i < expData.length; i++) {
+          var att = expData[i];
+          expDict[att.location_code] = att.export_value;
+          impDict[att.location_code] = att.import_value;
+        }
+      });
+
+      setTooltip();
+      break;
+
+    case '2017':
+
+      d3.csv('./static/data/export_data_2017.csv', function(expData) {
+        // console.log(expData);
+        expData.export_value = +expData.export_value;
+        expData.import_value = +expData.import_value;
+        for (var i = 0; i < expData.length; i++) {
+          var att = expData[i];
+          expDict[att.location_code] = att.export_value;
+          impDict[att.location_code] = att.import_value;
+        }
+      });
+
+      setTooltip();
+      break;
+
+    case '2018':
+
+      d3.csv('./static/data/export_data_2018.csv', function(expData) {
+        // console.log(expData);
+        expData.export_value = +expData.export_value;
+        expData.import_value = +expData.import_value;
+        for (var i = 0; i < expData.length; i++) {
+          var att = expData[i];
+          expDict[att.location_code] = att.export_value;
+          impDict[att.location_code] = att.import_value;
+        }
+      });
+      console.log(expDict);
+      setTooltip();
+      break;
+  }
+  lyrBoundaries.addTo(mymap);
+});
+
+// filter out the outlier data points
+// // lyrBoundaries.refilter(function(feature){
+// //   return feature.properties.key != "-99";
+// });
 
 // function style
 function myStyle(feature) {
@@ -81,7 +152,7 @@ function myStyle(feature) {
     };
   }
   else {
-    console.log('ERROR: -99 found')
+    // console.log('ERROR: -99 found!')
     return
   }
 }
@@ -97,7 +168,6 @@ function highlightFeature(e) {
       fillOpacity: 0.7
   });
 
-
   if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
       layer.bringToFront();
   }
@@ -105,7 +175,6 @@ function highlightFeature(e) {
 
 // function reset highlight
 function resetHighlight(e) {
-
   lyrBoundaries.resetStyle(e.target);
 
 }
@@ -141,15 +210,6 @@ function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-// define basemaps
-objBasemaps = {
-    "Outdoors": lyrOutdoors
-};
-
-// define overlays
-objOverlays = {
-    "Boundary":lyrBoundaries
-};
 
 // Set up the legend
 
@@ -164,23 +224,15 @@ var legend = L.control({position: 'bottomleft'});
 
     var labels = ['$1M', '$10M', '$100M', '$1B', '$100B', '$1T', '$2T', '$2T+'];
 
-    // var legendInfo = "<h4 style='text-align:center;'>Export Value</h4>" ;
-
-    // div.innerHTML = legendInfo;
-    // loop through lgdInfo to set the equivalent color
-
-    div.innerHTML += "<ul>" + labels.join("&ndash;&ndash;&ndash;&ndash;&ndash;&ndash;&ndash;&ndash;") + "</ul>";
+    div.innerHTML += "<ul>" + labels.join("&ndash;&ndash;&ndash;&ndash;&ndash;&ndash;") + "</ul>";
     for (var i = 0; i < lgdInfo.length; i++) {
-      // labels.push('<i style="background-color: ' + getColor(lgdInfo[i]) +'" ></i>');
-      // setting labels for the legend using (?:) conditional operator
-      div.innerHTML += '<i style="background-color: ' + getColor(lgdInfo[i]) +'" ></i>'
+      div.innerHTML += '<i style="background-color:' + getColor(lgdInfo[i]) +'" ></i>'
     }
     return div;
   };
 
 // Add legend to the map
 legend.addTo(mymap);
-
 
 mymap.on('click', function(e){
   if (e.originalEvent.shiftKey) {
@@ -189,5 +241,16 @@ mymap.on('click', function(e){
       alert(e.latlng.toString());
   }
 });
+
+// define basemaps
+objBasemaps = {
+  "Outdoors": lyrOutdoors
+};
+
+// define overlays
+objOverlays = {
+  "Boundary":lyrBoundaries
+};
+
 
 // ctlLayers = L.control.layers(objBasemaps, objOverlays, {collapsed: false}).addTo(mymap);
