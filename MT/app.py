@@ -1,20 +1,20 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, jsonify
 from flask_pymongo import PyMongo
-import scrape_mars
-import codecs
 
 app = Flask(__name__)
 
-mongo = PyMongo(app, uri="mongodb://localhost:27017/mars_app")
-
-export_data = sqlalchemy("static/data/export.sqlite")
+mongo = PyMongo(app, uri="mongodb://localhost:27017/countries_info_db")
 
 @app.route("/")
 def index():
 
-    mars = mongo.db.collection.find_one()
+    # mars = mongo.db.collection.find_one()
     
-    return render_template("index.html", export = export_data)
+    return render_template("index.html") #export = export_data)
+
+@app.route("/data/<country>")
+def retreive(country):
+
 
 @app.route("/scrape")
 def scrape():
