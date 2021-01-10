@@ -241,12 +241,29 @@ d3.json(`/data/${country}`, function(data) {
 });
 
 lyrBoundaries.on('click', function(e){
-  console.log(e)
-  if (e.originalEvent.shiftKey) {
-      alert(myMap.getZoom());
-  } else {
-      alert(e.latlng.toString());
-  }
+
+  var country = e.layer.feature.properties.ADMIN;
+
+  d3.json(`/data/${country}`, function(data) {
+    var keys = Object.keys(data);
+    var values = Object.values(data);
+  
+    var a = [];
+  
+    keys.forEach(function(x) {
+      a.push({x: data[x]});
+    });
+    
+    d3.select("tbody").html("");
+  
+    d3.select("tbody").selectAll("tr")
+      .data(a)
+      .enter()
+      .append("tr")
+      .html(function(d, i) {
+        return `<th scope="row">${keys[i]}</th><td>${d.x}</td>`
+      });
+  });
 });
 
 // define basemaps
