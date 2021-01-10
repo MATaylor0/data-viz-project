@@ -1,26 +1,22 @@
 // loading geoJSON from source
 // Initialize map, setting the streetmap and earthquakes layers to display on load
 // Set view to Central Europe latlng
-var mymap = L.map("map", {center: [50.378472, 14.970598], zoom: 3});
+var myMap = L.map("map", {center: [50.378472, 14.970598], zoom: 3});
 
 // Use Thunderforest.Outdoors layer as basemap
 var lyrOutdoors = L.tileLayer.provider('Thunderforest.Outdoors');
 
-mymap.addLayer(lyrOutdoors);
+myMap.addLayer(lyrOutdoors);
 
 const geoData = '../static/data/countries.geojson';
 
 // declare variables
-var objBasemaps;
-var objOverlays;
-var ctlLayers;
-var lyrBoundaries;
+var objBasemaps, objOverlays, objOverlays, ctlLayers, lyrBoundaries;
 
 var expDict = {};
 var impDict = {};
-var expVal, impVal, defVal;
-var selYear;
-var optColor;
+
+var expVal, impVal, defVal, selYear, optColor;
 
 // use d3 to load csv file and create dictionary to hold key/value pairs
 d3.csv('../static/data/export_data_2018.csv', function(expData) {
@@ -33,7 +29,6 @@ d3.csv('../static/data/export_data_2018.csv', function(expData) {
     var att = expData[i];
     expDict[att.location_code] = att.export_value;
     impDict[att.location_code] = att.import_value;
-
   }
 });
 
@@ -46,39 +41,37 @@ setTooltip();
 // setting tooltip for layerBoundaries
 function setTooltip() {
   lyrBoundaries = L.geoJSON.ajax('../static/data/countries.geojson',{ style: myStyle,
-                                  onEachFeature: function(feature, layer) {
+    onEachFeature: function(feature, layer) {
 
-                                  // console.log(selYear);
-                                  var expVal = parseFloat(optColor).toFixed(2);
-                                  var impNum = parseFloat(impVal).toFixed(2);
+    var expVal = parseFloat(optColor).toFixed(2);
+    var impNum = parseFloat(impVal).toFixed(2);
 
-                                  var trdDefi = expVal - impNum;
-                                  trdDefi.toFixed(0);
-                                  expVal = numberWithCommas(expVal);
-                                  impNum = numberWithCommas(impNum);
+    var trdDefi = expVal - impNum;
+    trdDefi.toFixed(0);
+    expVal = numberWithCommas(expVal);
+    impNum = numberWithCommas(impNum);
 
-                                  layer.bindTooltip("<h4 style = 'text-align: center; background-color: #ffcc66'><b>" + feature.properties.ADMIN + "</h4></b>" +
-                                    "Export: " + '$' + expVal + '<br>' + 'Import: ' + '$' + impNum + '<br>' +
-                                    'Surplus: ' + (trdDefi < 0 ? '-' + formatDollar(trdDefi) : formatDollar(trdDefi)),{interactive:false});
-                                  layer.on({
-                                    mouseover: highlightFeature,
-                                    mouseout: resetHighlight
-                                  });
-                                }
+    layer.bindTooltip("<h4 style = 'text-align: center; background-color: #ffcc66'><b>" + feature.properties.ADMIN + "</h4></b>" +
+      "Export: " + '$' + expVal + '<br>' + 'Import: ' + '$' + impNum + '<br>' +
+      'Surplus: ' + (trdDefi < 0 ? '-' + formatDollar(trdDefi) : formatDollar(trdDefi)),{interactive:false});
+    
+    layer.on({
+      mouseover: highlightFeature,
+      mouseout: resetHighlight
+    });
+    }
   });
 }
 
 // add layer to map
-lyrBoundaries.addTo(mymap);
+lyrBoundaries.addTo(myMap);
 
 // use jQuery library to acquire the selected year in radio button
 $("input[name=fltYear]").click(function(){
   selYear = $("input[name=fltYear]:checked").val()
-  // console.log(selYear);
 
   switch(selYear) {
     case '2016':
-      console.log(selYear);
       d3.csv('../static/data/export_data_2016.csv', function(expData) {
 
         expData.export_value = +expData.export_value;
@@ -95,9 +88,8 @@ $("input[name=fltYear]").click(function(){
       break;
 
     case '2017':
-
       d3.csv('../static/data/export_data_2017.csv', function(expData) {
-        // console.log(expData);
+        
         expData.export_value = +expData.export_value;
         expData.import_value = +expData.import_value;
         for (var i = 0; i < expData.length; i++) {
@@ -111,9 +103,8 @@ $("input[name=fltYear]").click(function(){
       break;
 
     case '2018':
-
       d3.csv('../static/data/export_data_2018.csv', function(expData) {
-        // console.log(expData);
+        
         expData.export_value = +expData.export_value;
         expData.import_value = +expData.import_value;
         for (var i = 0; i < expData.length; i++) {
@@ -122,17 +113,12 @@ $("input[name=fltYear]").click(function(){
           impDict[att.location_code] = att.import_value;
         }
       });
-      console.log(expDict);
+      
       setTooltip();
       break;
   }
-  lyrBoundaries.addTo(mymap);
+  lyrBoundaries.addTo(myMap);
 });
-
-// filter out the outlier data points
-// // lyrBoundaries.refilter(function(feature){
-// //   return feature.properties.key != "-99";
-// });
 
 // function style
 function myStyle(feature) {
@@ -140,7 +126,6 @@ function myStyle(feature) {
   if (feature.properties.ISO_A3 != "-99") {
     optColor = expDict[feature.properties.ISO_A3];
     impVal = impDict[feature.properties.ISO_A3];
-    // console.log(optColor);
 
     return {
         fillColor: getColor(optColor),
@@ -176,7 +161,6 @@ function highlightFeature(e) {
 // function reset highlight
 function resetHighlight(e) {
   lyrBoundaries.resetStyle(e.target);
-
 }
 
 // function to assign suitable color depend up export value
@@ -200,6 +184,7 @@ function getColor(val) {
 // Function to format number with dollar sign
 function formatDollar(num) {
   var p = num.toFixed(2).split(".");
+
   return "$" + p[0].split("").reverse().reduce(function(acc, num, i, orig) {
       return  num=="-" ? acc : num + (i && !(i % 3) ? "," : "") + acc;
   }, "") + "." + p[1];
@@ -210,9 +195,7 @@ function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-
 // Set up the legend
-
 var legend = L.control({position: 'bottomleft'});
 
   legend.onAdd = function () {
@@ -232,11 +215,35 @@ var legend = L.control({position: 'bottomleft'});
   };
 
 // Add legend to the map
-legend.addTo(mymap);
+legend.addTo(myMap);
 
-mymap.on('click', function(e){
+// Default country table values
+country = "Australia";
+
+d3.json(`/data/${country}`, function(data) {
+  
+  var keys = Object.keys(data);
+  var values = Object.values(data);
+
+  var a = [];
+
+  keys.forEach(function(x) {
+    a.push({x: data[x]});
+  });
+
+  d3.select("tbody").selectAll("tr")
+    .data(a)
+    .enter()
+    .append("tr")
+    .html(function(d, i) {
+      return `<th scope="row">${keys[i]}</th><td>${d.x}</td>`
+    });
+});
+
+lyrBoundaries.on('click', function(e){
+  console.log(e)
   if (e.originalEvent.shiftKey) {
-      alert(mymap.getZoom());
+      alert(myMap.getZoom());
   } else {
       alert(e.latlng.toString());
   }
@@ -251,6 +258,3 @@ objBasemaps = {
 objOverlays = {
   "Boundary":lyrBoundaries
 };
-
-
-// ctlLayers = L.control.layers(objBasemaps, objOverlays, {collapsed: false}).addTo(mymap);
