@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>data-viz-projec</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"
+  integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+  crossorigin=""/>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="../static/css/bootstrap.css">
+
+  <!-- Our CSS -->
+  <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+
+  <!-- Plugins CSS  -->
+  <!-- MarkerCluster -->
+
+  <style>
+    #map{
+        height:100%;
+      }
+    .info {
+      padding: 3px 6px;
+      font: 11px/13px Arial, Helvetica, sans-serif;
+      margin-left: 3px;
+      background: white;
+      background: rgba(255,255,255,0.8);
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 5px;
+    }
+    .legend {
+      margin-left: 3px;
+      line-height: 18px;
+      color: #555;
+
+    }
+    .legend i {
+      width: 62px;
+      height: 16px;
+      float: left;
+      /* margin-right: 8px; */
+      margin-left: 4px;
+      opacity: 0.7;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <!-- The div that holds our map -->
+  <div id="side-bar" class="col-md-3">
+    <div id="divFactdata" class="text-center col-xs-12">
+      <hr><h4><b>Data Selection</b></h4><hr>
+  </div>
+    <!-- <button id='divCountry' class='btn btn-primary btn-block'>Country</button><br> -->
+    <div id="divSelYear" class="col-xs-12">
+
+      <div class="col-xs-4">
+          <input type='radio' name='fltYear' value='2018' checked> 2018
+      </div>
+      <div class="col-xs-4">
+          <input type='radio' name='fltYear' value='2017'> 2017
+      </div>
+      <div class="col-xs-4">
+          <input type='radio' name='fltYear' value='2016'> 2016
+      </div>
+
+  </div>
+    <div id="divFact" class="col-xs-12">
+      <div id="divFactdata" class="text-center col-xs-12">
+          <hr><h4><b>Country Data</b></h4><hr>
+      </div>
+      <p> Information about selected country!</p>
+      <p> Information about selected country!</p>
+      <p> Information about selected country!</p>
+    </div>
+  </div>
+  <div id="map" class="col-md-9"></div>
+
+  <!-- Leaflet JavaScript -->
+  <script src="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
+  <!-- D3 JavaScript -->
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <!-- JQuery JS -->
+  <script src="../src/jquery-3.2.0.min.js"></script>
+  <!-- Leaflet-Choropleth JavaScript -->
+  <script type="text/javascript" src="../static/js/choropleth.js"></script>
+
+  <!-- Plugins -->
+  <script src="../src/plugins/leaflet-providers.js"></script>
+  <script src="../src/plugins/leaflet.ajax.min.js"></script>
+  <script type="text/javascript" src="../src/plugins/leaflet-heat.js"></script>
+
+  <!-- API key -->
+  <!-- <script type="text/javascript" src="static/js/config.js"></script> -->
+  <!-- Our JavaScript -->
+  <script type="text/javascript" src="../static/js/logic.js"></script>
+
+</body>
+</html>
