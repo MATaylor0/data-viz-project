@@ -51,11 +51,9 @@ function setTooltip() {
     expVal = numberWithCommas(expVal);
     impNum = numberWithCommas(impNum);
 
-    layer.bindTooltip("<h4 style = 'text-align: center; background-color: #ffcc66'><b>" +
-    feature.properties.ADMIN + "</h4></b>" +
-    "• Export: " + '$' + expVal + '<br>' + '• Import: ' + '$' + impNum + '<br>' +
-    '• Surplus: ' + (trdDefi < 0 ? '-' + formatDollar(trdDefi) : formatDollar(trdDefi)) + '<br>' +
-    '• Contribution: ' + pctExpVal +'%',{interactive:false});
+    layer.bindTooltip("<h4 style = 'text-align: center; background-color: #ffcc66'><b>" + feature.properties.ADMIN + "</h4></b>" +
+      "Export: " + '$' + expVal + '<br>' + 'Import: ' + '$' + impNum + '<br>' +
+      'Surplus: ' + (trdDefi < 0 ? '-' + formatDollar(trdDefi) : formatDollar(trdDefi)),{interactive:false});
     
     layer.on({
       mouseover: highlightFeature,
