@@ -246,6 +246,55 @@ function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+// Default country table values
+country = "Australia";
+
+d3.json(`/data/${country}`, function(data) {
+  
+  var keys = Object.keys(data);
+  var values = Object.values(data);
+
+  var a = [];
+
+  keys.forEach(function(x) {
+    a.push({x: data[x]});
+  });
+
+  d3.select("tbody").selectAll("tr")
+    .data(a)
+    .enter()
+    .append("tr")
+    .html(function(d, i) {
+      return `<th scope="row">${keys[i]}</th><td>${d.x}</td>`
+    });
+});
+
+lyrBoundaries.on('click', function(e){
+
+  var country = e.layer.feature.properties.ADMIN;
+
+  d3.json(`/data/${country}`, function(data) {
+    var keys = Object.keys(data);
+    var values = Object.values(data);
+  
+    var a = [];
+  
+    keys.forEach(function(x) {
+      a.push({x: data[x]});
+    });
+    
+    d3.select("tbody").html("");
+  
+    d3.select("tbody").selectAll("tr")
+      .data(a)
+      .enter()
+      .append("tr")
+      .html(function(d, i) {
+        return `<th scope="row">${keys[i]}</th><td>${d.x}</td>`
+      });
+  });
+});
+
 // Set up the legend
 
 var legend = L.control({position: 'bottomleft'});

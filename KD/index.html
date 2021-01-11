@@ -12,10 +12,10 @@
     crossorigin=""/>
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="static/css/bootstrap.css">
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
 
     <!-- Our CSS -->
-    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
 
     <!-- Plugins CSS  -->
 
@@ -93,21 +93,21 @@
     <!-- d3 JavaScript -->
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <!-- JQuery JS -->
-    <script src="src/jquery-3.2.0.min.js"></script>
+    <script src="{{url_for('static', filename='jquery-3.2.0.min.js')}}"></script>
     <!-- Leaflet-Choropleth JavaScript -->
-    <script type="text/javascript" src="static/js/choropleth.js"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/choropleth.js')}}"></script>
 
     <!-- Plugins -->
 
-    <script src="src/plugins/leaflet-providers.js"></script>
-    <script src="src/plugins/leaflet.ajax.min.js"></script>
-    <script type="text/javascript" src="src/plugins/leaflet-heat.js"></script>
+    <script src="{{url_for('static', filename='plugins/leaflet-providers.js')}}"></script>
+    <script src="{{url_for('static', filename='plugins/leaflet.ajax.min.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='plugins/leaflet-heat.js')}}"></script>
 
 
     <!-- API key -->
     <!-- <script type="text/javascript" src="static/js/config.js"></script> -->
     <!-- Our JavaScript -->
-    <script type="text/javascript" src="static/js/logic.js"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/logic.js')}}"></script>
 
   </body>
 </html>
