@@ -68,7 +68,10 @@ lyrBoundaries.addTo(myMap);
 
 // use jQuery library to acquire the selected year in radio button
 $("input[name=fltYear]").click(function(){
-  selYear = $("input[name=fltYear]:checked").val()
+
+  myMap.removeLayer(lyrBoundaries);
+
+  selYear = $("input[name=fltYear]:checked").val();
 
   switch(selYear) {
     case '2016':
