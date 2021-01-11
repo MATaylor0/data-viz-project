@@ -5,7 +5,7 @@ var mymap = L.map("map", {center: [50.378472, 14.970598],
                           zoom: 3});
 
 // set max bounds for the map
-mymap.setMaxBounds(mymap.getBounds().pad(1));
+mymap.setMaxBounds(mymap.getBounds().pad(2));
 
 // Use Thunderforest.Outdoors layer as basemap
 var lyrOutdoors = L.tileLayer.provider('Thunderforest.Outdoors');
@@ -13,13 +13,6 @@ var lyrOutdoors = L.tileLayer.provider('Thunderforest.Outdoors');
 mymap.addLayer(lyrOutdoors);
 
 const geoQuery = './static/data/countries.geojson';
-
-// declare variables
-// var objBasemaps;
-// var objOverlays;
-// var ctlLayers;
-// lyrBoundaries = new L.LayerGroup();
-
 var lyrBoundaries;
 
 var expDict = {};
