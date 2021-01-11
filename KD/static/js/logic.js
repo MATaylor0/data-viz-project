@@ -41,11 +41,14 @@ d3.csv('./static/data/export_data_2018.csv', function(expData) {
 
   // add layer to map
   lyrBoundaries.addTo(mymap);
-
 });
+
+
 
 // function setting tooltip for layerBoundaries
 function setTooltip() {
+
+
 
   lyrBoundaries = L.geoJSON.ajax(geoQuery, { style: myStyle,
     onEachFeature: function(feature, layer) {
@@ -91,10 +94,15 @@ function setTooltip() {
       });
     }
   });
+
 }
 
 // use jQuery library to acquire the selected year in radio button
 $("input[name=fltYear]").click(function(){
+
+  // remove existing layer prior to adding layerBoundaries with new bindtooltip data back
+  mymap.removeLayer(lyrBoundaries);
+
   var selYear = $("input[name=fltYear]:checked").val();
   // console.log(selYear);
 
@@ -136,6 +144,7 @@ $("input[name=fltYear]").click(function(){
       break;
 
   }
+
   // refresh layer boundaries with respective tooltip data to map
   lyrBoundaries.addTo(mymap);
 
@@ -199,9 +208,6 @@ function highlightFeature(e) {
       fillOpacity: 0.7
   });
 
-  if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-      layer.bringToFront();
-  }
 }
 
 // function reset highlight
@@ -223,7 +229,7 @@ function getColor(val) {
           val < 100000000000 ? '#88cc00':
           val < 1000000000000 ? '#669900':
           val < 2000000000000 ? '#446600':
-          val < 5000000000000 ? '#1a3300':
+          val < 3000000000000 ? '#223300':
                                 '#f0f0f5';
 }
 
