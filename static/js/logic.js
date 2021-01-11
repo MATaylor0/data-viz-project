@@ -5,7 +5,7 @@ var mymap = L.map("map", {center: [50.378472, 14.970598],
                           zoom: 3});
 
 // set max bounds for the map
-mymap.setMaxBounds(mymap.getBounds());
+// mymap.setMaxBounds(mymap.getBounds());
 
 // Use Thunderforest.Outdoors layer as basemap
 var lyrOutdoors = L.tileLayer.provider('Thunderforest.Outdoors');
