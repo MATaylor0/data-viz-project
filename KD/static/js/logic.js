@@ -6,7 +6,6 @@ var mymap = L.map("map", {center: [50.378472, 14.970598],
 
 // set max bounds for the map
 mymap.setMaxBounds(mymap.getBounds().pad(0.1));
-// mymap.setZoom(5)
 
 // Use Thunderforest.Outdoors layer as basemap
 var lyrOutdoors = L.tileLayer.provider('Thunderforest.Outdoors');
@@ -16,19 +15,20 @@ mymap.addLayer(lyrOutdoors);
 const geoQuery = './static/data/countries.geojson';
 
 // declare variables
-var objBasemaps;
-var objOverlays;
-var ctlLayers;
+// var objBasemaps;
+// var objOverlays;
+// var ctlLayers;
+// lyrBoundaries = new L.LayerGroup();
+
 var lyrBoundaries;
 
 var expDict = {};
 var impDict = {};
 var expVal, impVal, defVal;
+var ttlExpVal;
 var selYear;
-var optColor;
+var ctyExpVal;
 
-
-// lyrBoundaries = new L.LayerGroup();
 
 // use d3 to load csv file and create dictionary to hold key/value pairs
 d3.csv('./static/data/export_data_2018.csv', function(expData) {
@@ -48,33 +48,48 @@ d3.csv('./static/data/export_data_2018.csv', function(expData) {
 function setTooltip() {
 
   lyrBoundaries = L.geoJSON.ajax(geoQuery, { style: myStyle,
-                    onEachFeature: function(feature, layer) {
+    onEachFeature: function(feature, layer) {
 
-                    // console.log(selYear);
-                    var expVal = parseFloat(optColor).toFixed(2);
-                    var impNum = parseFloat(impVal).toFixed(2);
+    // console.log(selYear);
+    var expVal = parseFloat(ctyExpVal).toFixed(2);
 
-                    // check if the data is available
-                    if (isNaN(expVal)) {
-                      layer.bindTooltip("<h4 style = 'text-align: center; background-color: #ffcc66'><b>" +
-                      feature.properties.ADMIN + "</h4></b>" + "Data unavailable!");
-                    }
+    // var expVal = ctyExpVal;
+    // console.log(expVal);
 
-                    else {
-                    var trdDefi = expVal - impNum;
-                    trdDefi.toFixed(2);
-                    expVal = numberWithCommas(expVal);
-                    impNum = numberWithCommas(impNum);
+    var impNum = parseFloat(impVal).toFixed(2);
 
-                    layer.bindTooltip("<h4 style = 'text-align: center; background-color: #ffcc66'><b>" +
-                      feature.properties.ADMIN + "</h4></b>" + "Export: " + '$' + expVal + '<br>' + 'Import: ' + '$' + impNum + '<br>' +
-                      'Surplus: ' + (trdDefi < 0 ? '-' + formatDollar(trdDefi) : formatDollar(trdDefi)),{interactive:false});
-                    }
-                    layer.on({
-                      mouseover: highlightFeature,
-                      mouseout: resetHighlight
-                    });
-                  }
+    // check if the data is available
+    if (isNaN(expVal)) {
+      layer.bindTooltip("<h4 style = 'text-align: center; background-color: #ffcc66'><b>" +
+      feature.properties.ADMIN + "</h4></b>" + "Data unavailable!");
+    }
+
+    else {
+
+      var trdDefi = expVal - impNum;
+      trdDefi.toFixed(2);
+
+      pctExpVal = expVal*100/ttlExpVal;
+      pctExpVal = pctExpVal.toFixed(3);
+
+      expVal = numberWithCommas(expVal);
+      impNum = numberWithCommas(impNum);
+      pctExpVal = numberWithCommas(pctExpVal);
+
+      // bindtooltip of each feature to layer
+
+      layer.bindTooltip("<h4 style = 'text-align: center; background-color: #ffcc66'><b>" +
+        feature.properties.ADMIN + "</h4></b>" +
+        "• Export: " + '$' + expVal + '<br>' + '• Import: ' + '$' + impNum + '<br>' +
+        '• Surplus: ' + (trdDefi < 0 ? '-' + formatDollar(trdDefi) : formatDollar(trdDefi)) + '<br>' +
+        '• Contribution: ' + pctExpVal +'%',{interactive:false});
+      }
+
+      layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight
+      });
+    }
   });
 }
 
@@ -114,6 +129,7 @@ $("input[name=fltYear]").click(function(){
       d3.csv('./static/data/export_data_2018.csv', function(expData) {
 
         parseData(expData);
+
       });
 
       setTooltip();
@@ -131,11 +147,17 @@ function parseData(expData) {
   expData.export_value = +expData.export_value;
   expData.import_value = +expData.import_value;
 
+  ttlExpVal = 0;
+
   // looping through each row to assign export/import value to dictionaries
   for (var i = 0; i < expData.length; i++) {
+
     var att = expData[i];
     expDict[att.location_code] = att.export_value;
     impDict[att.location_code] = att.import_value;
+
+    // total export value
+    ttlExpVal = ttlExpVal + parseFloat(att.export_value);
   }
 };
 
@@ -144,12 +166,11 @@ function myStyle(feature) {
   // mark down the outlier data points
   if (feature.properties.ISO_A3 != "-99") {
 
-    optColor = expDict[feature.properties.ISO_A3];
+    ctyExpVal = expDict[feature.properties.ISO_A3];
     impVal = impDict[feature.properties.ISO_A3];
-    // console.log(optColor);
-
+    // console.log(ctyExpVal);
     return {
-        fillColor: getColor(optColor),
+        fillColor: getColor(ctyExpVal),
         weight: 1,
         color: 'white',
         dashArray: '3',
@@ -158,7 +179,7 @@ function myStyle(feature) {
   }
   else {
     return {
-    fillColor: getColor(optColor),
+    fillColor: getColor(ctyExpVal),
         weight: 1,
         color: 'white',
         dashArray: '3',
