@@ -227,6 +227,8 @@ d3.json(`/data/${country}`, function(data) {
   var keys = Object.keys(data);
   var values = Object.values(data);
 
+  keys.shift();
+
   var a = [];
 
   keys.forEach(function(x) {
@@ -249,6 +251,8 @@ lyrBoundaries.on('click', function(e){
   d3.json(`/data/${country}`, function(data) {
     var keys = Object.keys(data);
     var values = Object.values(data);
+    
+  keys.shift();
   
     var a = [];
   
