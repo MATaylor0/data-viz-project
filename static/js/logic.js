@@ -190,7 +190,7 @@ function getColor(val) {
             val < 2000000000000 ? '#446600':
             val < 3000000000000 ? '#223300':
                                   '#f0f0f5';
-  }
+   }
 
 // Function to format number with dollar sign
 function formatDollar(num) {
@@ -207,26 +207,26 @@ function numberWithCommas(x) {
 }
 
 // // Set up the legend
-// var legend = L.control({position: 'bottomleft'});
+var legend = L.control({position: 'bottomleft'});
 
-//   legend.onAdd = function () {
+  legend.onAdd = function () {
 
-//     var div = L.DomUtil.create('div', 'info legend');
-//     var lgdInfo = [1000000, 10000000, 100000000,
-//                   1000000000, 10000000000, 100000000000,
-//                   1000000000000, 2000000000000];
+     var div = L.DomUtil.create('div', 'info legend');
+     var lgdInfo = [1000000, 10000000, 100000000,
+                   1000000000, 10000000000, 100000000000,
+                   1000000000000, 2000000000000];
 
-//     var labels = ['$1M', '$10M', '$100M', '$1B', '$100B', '$1T', '$2T', '$2T+'];
+     var labels = ['$1M', '$10M', '$100M', '$1B', '$100B', '$1T', '$2T', '$2T+'];
 
-//     div.innerHTML += "<ul>" + labels.join("&ndash;&ndash;&ndash;&ndash;&ndash;&ndash;") + "</ul>";
-//     for (var i = 0; i < lgdInfo.length; i++) {
-//       div.innerHTML += '<i style="background-color:' + getColor(lgdInfo[i]) +'" ></i>'
-//     }
-//     return div;
-//   };
+     div.innerHTML += "<ul>" + labels.join("&ndash;&ndash;&ndash;&ndash;&ndash;&ndash;") + "</ul>";
+     for (var i = 0; i < lgdInfo.length; i++) {
+       div.innerHTML += '<i style="background-color:' + getColor(lgdInfo[i]) +'" ></i>'
+     }
+     return div;
+   };
 
-// // Add legend to the map
-// legend.addTo(myMap);
+// Add legend to the map
+legend.addTo(myMap);
 
 // Default country table values
 country = "Australia";
