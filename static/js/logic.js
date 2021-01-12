@@ -1,7 +1,7 @@
 // loading geoJSON from source
 // Initialize map, setting the streetmap and earthquakes layers to display on load
 // Set view to Central Europe latlng
-var myMap = L.map("map", {center: [50.378472, 14.970598], zoom: 1.6});
+var myMap = L.map("map", {center: [50.378472, 14.970598], zoom: 2.5});
 
 // Use Thunderforest.Outdoors layer as basemap
 var lyrOutdoors = L.tileLayer.provider('Thunderforest.Outdoors');
@@ -206,27 +206,27 @@ function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-// Set up the legend
-var legend = L.control({position: 'bottomleft'});
+// // Set up the legend
+// var legend = L.control({position: 'bottomleft'});
 
-  legend.onAdd = function () {
+//   legend.onAdd = function () {
 
-    var div = L.DomUtil.create('div', 'info legend');
-    var lgdInfo = [1000000, 10000000, 100000000,
-                  1000000000, 10000000000, 100000000000,
-                  1000000000000, 2000000000000];
+//     var div = L.DomUtil.create('div', 'info legend');
+//     var lgdInfo = [1000000, 10000000, 100000000,
+//                   1000000000, 10000000000, 100000000000,
+//                   1000000000000, 2000000000000];
 
-    var labels = ['$1M', '$10M', '$100M', '$1B', '$100B', '$1T', '$2T', '$2T+'];
+//     var labels = ['$1M', '$10M', '$100M', '$1B', '$100B', '$1T', '$2T', '$2T+'];
 
-    div.innerHTML += "<ul>" + labels.join("&ndash;&ndash;&ndash;&ndash;&ndash;&ndash;") + "</ul>";
-    for (var i = 0; i < lgdInfo.length; i++) {
-      div.innerHTML += '<i style="background-color:' + getColor(lgdInfo[i]) +'" ></i>'
-    }
-    return div;
-  };
+//     div.innerHTML += "<ul>" + labels.join("&ndash;&ndash;&ndash;&ndash;&ndash;&ndash;") + "</ul>";
+//     for (var i = 0; i < lgdInfo.length; i++) {
+//       div.innerHTML += '<i style="background-color:' + getColor(lgdInfo[i]) +'" ></i>'
+//     }
+//     return div;
+//   };
 
-// Add legend to the map
-legend.addTo(myMap);
+// // Add legend to the map
+// legend.addTo(myMap);
 
 // Default country table values
 country = "Australia";
