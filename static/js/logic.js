@@ -67,6 +67,34 @@ function setTooltip() {
   });
   // refresh layer boundaries with respective tooltip data to map
   lyrBoundaries.addTo(myMap);
+
+  lyrBoundaries.on('click', function(e){
+
+    var country = e.layer.feature.properties.ADMIN;
+  
+    d3.json(`/data/${country}`, function(data) {
+      var keys = Object.keys(data);
+      var values = Object.values(data);
+  
+    keys.shift();
+  
+      var a = [];
+  
+      keys.forEach(function(x) {
+        a.push({x: data[x]});
+      });
+  
+      d3.select("tbody").html("");
+  
+      d3.select("tbody").selectAll("tr")
+        .data(a)
+        .enter()
+        .append("tr")
+        .html(function(d, i) {
+          return `<th scope="row">${keys[i]}</th><td>${d.x}</td>`
+        });
+    });
+  });
 }
 
 // use jQuery library to acquire the selected year in radio button
@@ -251,32 +279,4 @@ d3.json(`/data/${country}`, function(data) {
     .html(function(d, i) {
       return `<th scope="row">${keys[i]}</th><td>${d.x}</td>`
     });
-});
-
-lyrBoundaries.on('click', function(e){
-
-  var country = e.layer.feature.properties.ADMIN;
-
-  d3.json(`/data/${country}`, function(data) {
-    var keys = Object.keys(data);
-    var values = Object.values(data);
-
-  keys.shift();
-
-    var a = [];
-
-    keys.forEach(function(x) {
-      a.push({x: data[x]});
-    });
-
-    d3.select("tbody").html("");
-
-    d3.select("tbody").selectAll("tr")
-      .data(a)
-      .enter()
-      .append("tr")
-      .html(function(d, i) {
-        return `<th scope="row">${keys[i]}</th><td>${d.x}</td>`
-      });
-  });
 });
